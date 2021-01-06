@@ -1,0 +1,79 @@
+Why Test? 
+Stability - qA
+Performance 
+Documentation
+Design - TDD
+
+BDD takes TDD to next level by directly linking story or Acceptence criteria with Test that we write. First write test the real implementation. 
+we can able to run automated acceptence testing using BDD.
+
+Basic Tests: Basic Unit test 
+Code Coverage test: 
+BlockBox test: code that dont want to go in detail
+BenchMark: Performance Test
+Example test: Uniq in go , add to doc.
+WebApps : 
+Profiling : 
+
+
+Test file Naming Coventions:
+there are certain rule go follows to identify the test file and the test inside the file.
+Testfile:  adding _test.go makes its as a test file, which will be ignored during build time. also help to identify the test file
+Test Function:
+   Basic Test:  function name must start with "TestXXX"
+   Benchmark Test: function name must start with " BenchmarkXXX"
+   Example Test: must start with "ExampleXXX
+
+TestAddNum(t *testing.T)": T object is used to interact with testrunner to inform someting happend in the test like Fail signal or message that we want to print. 
+to sinal the Failure we can use t.Fail() method and  to print the Log use t.Log("Some text")
+t.Error() => to report Error message. 
+
+Testing function pattern:
+Arrange
+Act
+Assert
+
+To run the test 
+# go run <package name> 
+
+to check the coverage use 
+# go test <package name> -cover
+
+above command will not giveoutput as which statwments are covered.l it only report the % coverage. that means test runner will not analyze the date only generate it... to analyze it we need to tool. the tool need data generated.
+#go test <package> -coverprofile=cover.out
+#go tool cover -func=cover.out
+
+above command will help to identify the which function not coverd. 
+
+we can generte html repot to identify  uncovered lines. 
+
+#go tool cover -html=cover.out
+
+
+To run a specific Test use testfunction name pattern
+#go test <package> -run pattern
+#go test pack -run Add     // this command will run only Tests with thd name Add others will be ignored.
+
+TO set timedout we can use -timeout , -v for verbose output. 
+# go test -v pack -timeout 2s 
+
+# To run test in parallel we need to use t.parallel() method in  test functions. 
+  
+To skip a testfunction by t.skip("message") method in the function.
+
+ 
+
+
+
+BenchMark Test
+This take B object instead of T object
+
+func BenchmarkExample(b *testing.B){
+}
+
+#go test <packagename> -bench . or reglular expression to match something. 
+
+
+Example test: no need testing pa
+
+=====

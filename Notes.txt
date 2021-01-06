@@ -1,0 +1,339 @@
+######## GOLANG Notes#######
+
+
+MAP in Golang.
+A Map is Similar to an Array but instead of numeric index it has keyvalue.(similar to dictionary in python)
+
+The syntax to define a map is
+
+var myMap map[keyType]valueType
+
+
+Example:
+-----------------
+var m map[string]int
+
+{
+  stringKey: intValue,
+  stringKey: intValue
+}
+-----------
+
+Make function used to create a empty map. 
+m := make(map[keyType]valueType)
+"delete" function used to delete a element in a map
+func delete(m map[Type]Type1, key Type)
+ range used to itterate the map.
+
+Maps are referenced type
+Like slice, map references an internal data structure. When you copy a map to a new map, the internal data structure is not copied, just referenced.
+
+===========================================================================
+Functions:
+ " defer " = fucntion call with this keyworld will execte the function at the end of the parent finction or when parent hits "return".
+ if we have multiple "defer" statement the last one execute first as LIFO.
+ Practical use of defer can be seen when a function has too many conditions whether if-else or case statements, and at the end of each condition, you need to do something like close a file or send http response. Instead of writing multiple calls, we can use defer to save the day
+
+
+ Function as a type: 
+ A function in Go is also a type. If two function accepts the same parameters and returns the same values, then these two functions are of the same type.. in Go, the function body does not have anything to do with the function type.
+
+Derived Type
+type <nameoftype> func (int, int) int
+
+we can declare a variable of type function and assign it layer, like below.
+var add func(int, int) int
+
+
+Function as value (anonymous function)
+ Means you can assign a function to a variable.
+
+ Example
+package main
+import "fmt"
+var add = func(a int, b int) int {
+	return a + b
+}
+func main() {
+	fmt.Println("5+3 =", add(5, 3))
+}
+------------------------------------
+
+Immediately-invoked function expression (IIFE)
+A function defined and executed at the same time.
+------------------------------------
+func main() {
+	sum := func(a int, b int) int {
+		return a + b
+	}(3, 5)
+	
+	fmt.Println("5+3 =", sum)
+}
+------------------------------------
+
+===========================================================================
+
+Structs in Go (structs):(https://medium.com/rungo/structures-in-go-76377cc106a2)
+   Struct is equlent to the class in OOP. It is a schema or template with different types of variables
+
+Declaring  a struct:
+-------------------------------- 
+-------------------------------- 
+ type <Name> struct{
+     <field1> <datatype>
+     <field1> <datatype>
+ } 
+--------------------------------
+--------------------------------
+
+Example:
+--------------------------------
+type Hotel struc{
+    Location sting
+    Number_of_room int
+    Open bool
+}
+--------------------------------
+
+By default, when we create an object from the struct it initialize the vars with "0" (String "",int 0, bool false)
+Example:Create an object
+--------------------------------
+HolidayInn := Hotel {
+    Location: "Santiago",
+    Number_of_room: 200,
+    Open: true
+}
+--------------------------------
+
+To get the values from the Object use "." operator
+
+Example:
+--------------------------------
+fmt.Println(HolidayInn)
+fmt.Println(HolidayInn.Location)
+--------------------------------
+
+Anonymous struct:
+This will be useful if we are not refering the struct again. we can create inline struct and assign values. 
+We can get the format by using fmt.println("%T", obj)
+Example:
+--------------------------
+ITC := struct {
+    Location sting
+    Number_of_room int
+    Open bool
+}{
+    Location: "Chennai",
+    Number_of_room: 2000,
+    Open: true
+
+}
+---------------------------
+
+Pointer to a Struct:
+We can assign the Pointer of a struct using the pointer operator(&) and deference using (*) operator. by default go deference the pointer no need to use *.
+Example:
+-------------------------
+Hilton := &Hotel{
+    Location: "Chennai",
+    Number_of_room: 2000,
+    Open: true
+}
+// refer using * 
+fmt.Println((*Hilton).Location)
+// parenthesis around the pointer dereferencing syntax in the program above so that compiler doesn’t get confused between (*Hilton).Location and *(Hilton.Location).
+--------------------------
+
+Anonymous field:
+Define struct without filedname but only with field datatype.Go will use the data type declarations (keywords) as the field names
+
+Example:
+---------------------------
+type Hotel struct{
+ String
+ int
+ bool
+}
+
+funtion main(){
+NH := Hotel{"Santiago",1000}
+NH.bool = true
+}
+-----------------------------
+We can use mix of Anonymous field and usual filedname
+-----------------------------
+type Hotel struct{
+    Location sting
+    Number_of_room int
+    bool
+}
+-----------------------------
+
+Nested struct:
+A "struct" filed  can be any of the datatype, so we can use another struct as a datatype
+
+Example:
+
+type Employee struct{
+    Chef int
+    Crew_members int
+} 
+
+type Hotel struct{
+    Location sting
+    Number_of_room int
+    Open bool
+    types_of_employee Employee
+}
+
+Hablies := Hotel{
+    Location: "Chennai",
+    Number_of_room: 1400,
+    Open: true
+    types_of_employee: {Chef: 100, Crew_members: 200}
+}
+
+When we instantiate  Hotel  strcut we are initilizing Employee struct too. 
+we can access nested struct values using the  "." operator like "Hablies.types_of_employee.Chef"
+
+Promoted struct.
+
+Since we are allowd to define anonymous filed datatype,   we can define parent stuct with only name of the child strcut.
+ Example:
+----------------------------
+ type Employee struct{
+    Chef int
+    Crew_members int
+} 
+
+type Hotel struct{
+    Location sting
+    Number_of_room int
+    Open bool
+    Employee
+}
+----------------------------- 
+Here all child struct filed will be availlbe as parent field. we can refer values using Hablies.Chef. this is called field Promotion.
+If a nested anonymous struct has a same field (field name) that conflcts with the field name defined in the parent struct, then that field won’t get promoted. Only the non-conflicting fields will get promoted.
+
+
+Nested Interface.
+that means  a field can have a data type of an interface.  So its value can be anything that implemets the interface.
+(Interface has the signature of methods)
+Example: 
+refer: Nested_interface.go
+Similar to the field promotions, methods also promoted when a struct field is an anonymous interface. (Only menthods are promoted not )
+
+
+Exported Fields:
+Any variable that starts with UpperCase will be exported form the package. we can also control which field of exported struct visible to outside of the package. 
+-----------------------
+// employee.go  This file exports the Employee struct type.
+package org
+type Employee struct {
+	FirstName, LastName string
+	salary              int
+	fullTime            bool
+}
+------------------------
+// main.go   In the main package, we can import the Employee struct type like below. if we use salary it will fail. but it will have the default "0" for int "" for string, false for bool value.
+package main
+import (
+	"fmt"
+	"org"
+)
+func main() {
+    ross := org.Employee{
+	FirstName: "Ross",
+	LastName:  "Geller",
+    }
+    fmt.Println(ross)
+}
+---------
+This is useful when you want to protect some fields but still make them useful as the default or constant values or perhaps something complex
+
+
+###Function fileds,(Function as a typex)###
+we can use type function  as filed type. 
+------
+type FullNameType func(string, string) string
+
+type Employee struct {
+    Name string
+    Fullname FullNameType
+}
+//define the function later
+-------
+
+
+Struct Comparision 
+we can compare struct instance(object) if they both are has same value and the field it will be true. 
+
+Struct Field MetaData:
+We can store meta-data info about a field. which can be refered by other function 
+
+Usually, it is used to provide transformation information on how a struct field is encoded to or decoded from another format (or stored/retrieved from a database), but you can use it to store whatever meta-info you want to, either intended for another package or for your own use.
+This meta-information is defined by the string literal (read strings lesson) like below.
+-------------------
+type Employee struct {
+	firstName string `json:"firstName"`
+	lastName  string `json:"lastName"`
+	salary    int    `json: "salary"`
+	fullTime  int    `json: "fullTime"`
+------------------
+
+=========================================
+
+Class = Properties(fields)) + Behaviors(methods)
+struct field can also be a function. We can add a bark field of type function which takes no arguments and returns a string woof woof!. This could be one way to add methods to the struct.
+But Go does not adhere to the OOP concept as struct fields do not have any idea of struct they belong to. Hence methods come to the rescue.
+
+Method:
+
+A method is nothing but a function, but it belongs to a certain type. A method is defined with slightly different syntax than a normal function. It required an additional parameter known as a receiver which is a type to which the function belongs. This way, a method (function) can access the properties of the receiver it belongs to (like fields of a struct).
+
+func (r Type) functionName(...Type) Type {
+    ...
+}
+
+we can have more than one method with "same name" as long as they have differnt receiver. 
+
+Pointer receivers
+a method can also belong to the pointer of a type
+When a method belongs to a type, its receiver receives a copy of the object on which it was called. it will not impact the original object on which the method was called.
+
+Methods can accept both pointer and value
+Methods belonging to struct type but from the definition of the methods, it is a function that can belong to any type. Hence a method can receive any type as long as the type definition and method definition is in the same package.
+
+Example:
+type MyString string
+
+FYI:https://medium.com/rungo/anatomy-of-methods-in-go-f552aaa8ac4a
+    
+==========================================
+Interface:
+ Wiki: In OOPs Protocol or an interface is a common means for unrelated objectes to "communicate" each other.  
+ Interface describes the behaviour. 
+ This is the only abstract type available in Go.  
+
+An interface is a collection of method signatures that a Type can implement (using methods). Hence interface defines (not declares) the behavior of the object (of the type Type).
+The primary job of an interface is to provide only method signatures consisting of the method name, input arguments and return types.
+If a type implements a method with name and signature defined in an interface, then that type implements that interface. Like saying if it walks like a duck, swims like a duck and quacks like a duck, then it’s a duck⁰.
+
+Declare interface:
+
+type Shape interface {
+    Area() float64
+    Perimeter() float64
+}
+
+There are two types of interface 
+1) static Type
+    An interface is the interface itself. 
+2) Dynamic Type
+    An interface does not have a static value, rather it points to a dynamic value.
+
+A variable of an interface type can hold a value of a type that implements the interface. 
+The value of that type becomes the dynamic value of the interface and that type becomes the dynamic type of the interface.
+
+

@@ -1,0 +1,27 @@
+what is OOP
+
+Complese applications of "objects" that interact to deliver behaviors. the key takeaway is "Object has rich understaing of how they operate but limited understaing about the objects that they interact operats. 	
+
+Object has data and methods. 
+  Data sits inside the object. the methods/functions sits on the edge of the Object. Other objects can interact with this object using this methods. Data is not exposed outside. we can access data only thorugh methods.
+   our application has multiple objects if one object want to communicate with other object it will interact with the methods that the object provides. 
+for example if we want to check the status of a TCP connection we cannot directly cehck the property of the connection insted we use tcphandler method to cehck it. here we dont need deep understand  how the tcphandleer cehck the connection status. 
+So objects can talk to each other only by publicaly exposed methods/functions or an API
+
+Characteristics: 
+Encapsulation. interact with objects only through methods, we dont need to understand the details of how the object going to accomplish thwhat is really happening in the object   .
+Message Passing: we pass the images but we are not sure what how thw objects will interpet it. 
+Inheritance: no inheritacne in GOlang: super type to children type.  but we can achive it with tpe Embedding 
+Polymorphism: one value can have multiple types. 
+: 
+
+
+Encapsulation: 
+   what it is? 
+       Accessing a service on an object "without knowing" how the service is implemented.
+   We are not exposing data we expose only methods. so we have control over data manipulation. 
+   we dont have the Class and private data in Go but we have interface and package oriented design to achive this.
+
+Package Oriented Design, 
+
+
